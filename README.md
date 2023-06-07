@@ -27,4 +27,4 @@ The list can be collected by either:
 
 :arrow_forward: Run *website-to-pdf.py*
 
-:arrow_forward: All URLs will be saved as .pdf to the same directory as *website-to-pdf.py*
+:arrow_forward: All URLs will be saved as .pdf to the `output/` directory from source *website-to-pdf.py*
