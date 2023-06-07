@@ -53,6 +53,7 @@ def delay(seconds=1):
 
 def main():
     print("Parsing websites to pdf.")
+
     path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
     # options_wkhtmltopdf = {"enable-local-file-access": None}
 
