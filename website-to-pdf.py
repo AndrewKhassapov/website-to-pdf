@@ -14,7 +14,7 @@ urls_to_parse = [
 # TODO: Add recursion to get all urls from a website.
 # TODO: Convert relative links to absolute links.
 # @refer https://stackoverflow.com/questions/59347372/how-extract-all-urls-in-a-website-using-beautifulsoup
-def get_url_list(homepage_url):
+def get_url_list_from_site(homepage_url):
     url = homepage_url
     reqs = requests.get(url)
     soup = BeautifulSoup(reqs.text, "html.parser")
@@ -24,6 +24,13 @@ def get_url_list(homepage_url):
         print(link.get("href"))
 
 
+def get_url_list_from_file(filename = "input/urls.txt"):
+    with open(filename, 'r', encoding='UTF-8') as file:
+    while line := file.readline():
+        print(line.rstrip())
+
+
+# Renames URL to a compatible filename.
 def rename_url_to_pdf(url):
     return url.replace("https://", "").replace("/", "-") + ".pdf"
 
