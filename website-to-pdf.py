@@ -22,12 +22,24 @@ def get_url_list_from_site(homepage_url):
     return urls
 
 
-"""
- def get_url_list_from_file(filename = "input/urls.txt"):
-    with open(filename, 'r', encoding='UTF-8') as file:
-    while line := file.readline():
-        print(line.rstrip())
-"""
+# Get URLs from newline- or comma- separated file.
+# @return list of urls
+def get_url_list_from_file(filename="input/urls.txt"):
+    urls = []
+
+    with open(filename, "r", encoding="UTF-8") as file:
+        while line := file.readline():
+            line = line.strip()
+            values = line.split(",")
+            for value in values:
+                value = value.replace('"', "").replace("'", "").strip()
+                if value != "":
+                    if value.startswith("http://") or value.startswith("https://"):
+                        urls.append(value)
+                    else:
+                        urls.append("https://" + value)  # Make valid URL
+
+    return urls
 
 
 # Renames URL to a Windows and Unix compatible filename.
@@ -84,4 +96,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    print(get_url_list_from_file()) # TEST
+    # main()
