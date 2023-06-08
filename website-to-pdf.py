@@ -8,9 +8,9 @@ urls_to_parse = []
 
 
 # Web crawler to get all linked urls from a website.
+# Converts relative paths to absolute paths.
 # @return list of urls
 # TODO: Add recursion to get all urls from a website.
-# TODO: Convert relative links to absolute links.
 # @refer https://stackoverflow.com/questions/59347372/how-extract-all-urls-in-a-website-using-beautifulsoup
 def get_url_list_from_site(homepage_url):
     reqs = requests.get(homepage_url)
@@ -18,7 +18,16 @@ def get_url_list_from_site(homepage_url):
 
     urls = []
     for link in soup.find_all("a"):
-        urls.append(link.get("href"))
+        link_href = link.get("href")
+        if (not link_href.startswith("http://")) and (
+            not link_href.startswith("https://")
+        ):
+            if homepage_url.endswith("/"):
+                link_href = homepage_url + link_href
+            else:
+                link_href = homepage_url + "/" + link_href
+        print(link_href)
+        urls.append(link_href)
     return urls
 
 
@@ -64,7 +73,7 @@ def delay(seconds=1):
 
 
 def main():
-    print("Parsing websites to pdf.")
+    print("=== Parsing websites to pdf. ===")
 
     path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
     # options_wkhtmltopdf = {"enable-local-file-access": None}
@@ -92,9 +101,9 @@ def main():
             print("Failed to parse {}".format(link))
         delay(0.7)
 
-    print("Website to pdf parsing complete.")
+    print("=== Website to pdf parsing complete. ===")
 
 
 if __name__ == "__main__":
-    print(get_url_list_from_file()) # TEST
-    # main()
+    # print(get_url_list_from_file())  # TEST
+    main()
