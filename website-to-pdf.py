@@ -4,6 +4,9 @@ import requests
 import os
 from bs4 import BeautifulSoup
 
+path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
+config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
 urls_to_parse = []
 
 
@@ -80,38 +83,64 @@ def delay(seconds=1):
     time.sleep(seconds)
 
 
+# Returns true if pdfkit detects a valid network connection.
+def get_network_connection():
+    try:
+        pdfkit.from_url(
+            "http://google.com",
+            move_to_directory("_test-passed-with-google-com.pdf", "network-check/"),
+            configuration=config,
+        )
+    except Exception as e:
+        print("Unable to connect due to {}".format(e))
+        return False
+    return True
+
+
 def main():
+    STOP_AFTER_FAILS = 10000  # Stop parsing after sequential fails.
+
     print("=== Parsing websites to pdf. ===\n")
 
-    path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-    # options_wkhtmltopdf = {"enable-local-file-access": None}
-
-    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-
     # urls_to_parse = get_url_list_from_site("https://howmuch.water.vic.gov.au/")
-    urls_to_parse = get_url_list_from_file()  # TEST
+    urls_to_parse = get_url_list_from_file()
     print(urls_to_parse)
-    set_url_list_to_file(urls_to_parse)  # TEST
+    set_url_list_to_file(urls_to_parse)
 
-    # Working:
-    pdfkit.from_url(
-        "http://google.com",
-        move_to_directory("_test-passed-with-google-com.pdf"),
-        configuration=config,
-    )
+    # Test network connection
+    if not get_network_connection():
+        print("No network connection for pdfkit. Exiting.")
+        return
 
     # Iteration working with delay.
+    fails = 0
+    passes = 0
+
     for link in urls_to_parse:
         try:
             pdfkit.from_url(
                 link, move_to_directory(rename_url_to_pdf(link)), configuration=config
             )
+            passes += 1
             print("Succesfully parsed {}".format(link))
-        except:
-            print("Failed to parse {}".format(link))
-        delay(0.1)
+        except Exception as e:
+            fails += 1
+            print("Failed to parse {0} due to {1}".format(link, e))
+        delay(0.7)
+        if fails >= STOP_AFTER_FAILS:
+            print(
+                "Failed to parse {} links in a row. End parsing.".format(
+                    STOP_AFTER_FAILS
+                )
+            )
+            break
 
     print("\n=== Website to pdf parsing complete. ===")
+    print(
+        "\nWith {2} sites scanned. {0} converted. {1} failed.".format(
+            passes, fails, len(urls_to_parse)
+        )
+    )
 
 
 if __name__ == "__main__":
