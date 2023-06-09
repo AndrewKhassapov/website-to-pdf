@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
 config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 pdfkit_options = {"orientation": "Landscape", "zoom": 1}
+print(pdfkit_options)
 
 urls_to_parse = []
 
@@ -31,7 +32,6 @@ def get_url_list_from_site(homepage_url):
                 link_href = homepage_url + link_href
             else:
                 link_href = homepage_url + "/" + link_href
-        print(link_href)
         urls.append(link_href)
     return urls
 
