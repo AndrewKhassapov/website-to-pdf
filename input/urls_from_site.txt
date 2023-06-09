@@ -1,4 +1,7 @@
-https://howmuch.water.vic.gov.au/
-https://howmuch.water.vic.gov.au/how-much-water-was-available.php
-https://howmuch.water.vic.gov.au/how-much-water-have-we-used.php
-https://howmuch.water.vic.gov.au/water-for-the-environment.php
+https://accounts.water.vic.gov.au/
+https://accounts.water.vic.gov.au/executive-summary/
+https://accounts.water.vic.gov.au/groundwater/
+https://accounts.water.vic.gov.au/surface-water-basins/
+https://accounts.water.vic.gov.au/surface_water_basin/rpe000001-avoca/
+https://accounts.water.vic.gov.au/surface_water_basin/rpe000002-barwon/
+https://accounts.water.vic.gov.au/surface_water_basin/rpe000003-broken/

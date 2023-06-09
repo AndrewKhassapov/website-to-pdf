@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
 config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+pdfkit_options = {"orientation": "Landscape", "zoom": 1}
 
 urls_to_parse = []
 
@@ -90,6 +91,7 @@ def get_network_connection():
             "http://google.com",
             move_to_directory("_test-passed-with-google-com.pdf", "network-check/"),
             configuration=config,
+            options=pdfkit_options,
         )
     except Exception as e:
         print("Unable to connect due to {}".format(e))
@@ -119,7 +121,10 @@ def main():
     for link in urls_to_parse:
         try:
             pdfkit.from_url(
-                link, move_to_directory(rename_url_to_pdf(link)), configuration=config
+                link,
+                move_to_directory(rename_url_to_pdf(link)),
+                configuration=config,
+                options=pdfkit_options,
             )
             passes += 1
             print("Succesfully parsed {}".format(link))
