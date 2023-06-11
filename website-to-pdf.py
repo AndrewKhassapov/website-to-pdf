@@ -1,24 +1,47 @@
+"""
+Website to .pdf converter
+
+Description: Converts a list of URLs to .pdf files either from a file or from a website.
+
+Author: Andrew Khassapov
+Date created: 5 June 2023
+Version: 1.0.0
+"""
+
 import pdfkit
 import time
 import requests
 import os
 from bs4 import BeautifulSoup
 
-path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-pdfkit_options = {"orientation": "Landscape", "zoom": 1}
-print(pdfkit_options)
 
+PATH_WKHTMLTOPDF = (
+    r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"  # Your path to wkhtmltopdf.exe
+)
+CONFIG = pdfkit.configuration(wkhtmltopdf=PATH_WKHTMLTOPDF)
+PDFKIT_OPTIONS = {"orientation": "Landscape", "zoom": 1}
+"""Options for .pdf output\n
+See for full property list:
+    https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
+"""
+STOP_AFTER_FAILS = 10000  # Stop parsing after sequential fails.
 urls_to_parse = []
 
 
-# Web crawler to get all linked urls from a website.
-# Converts relative paths to absolute paths.
-# @param homepage_url: The url of the website to crawl. eg. https://www.example.com
-# @return list of urls
-# TODO: Add recursion to get all urls from a website.
-# @refer https://stackoverflow.com/questions/59347372/how-extract-all-urls-in-a-website-using-beautifulsoup
 def get_url_list_from_site(homepage_url):
+    """Web crawler to get all linked urls from a website.
+    Converts relative paths to absolute paths.
+
+    Args:
+        homepage_url (str): The url of the website to crawl. eg. https://www.example.com
+
+    Returns:
+        list: list of urls
+
+    TODO: Add recursion to get all urls from a website.
+    Refer: https://stackoverflow.com/questions/59347372/how-extract-all-urls-in-a-website-using-beautifulsoup
+    """
+
     reqs = requests.get(homepage_url)
     soup = BeautifulSoup(reqs.text, "html.parser")
 
@@ -36,9 +59,15 @@ def get_url_list_from_site(homepage_url):
     return urls
 
 
-# Get URLs from newline- or comma- separated file.
-# @return list of urls
 def get_url_list_from_file(filename="input/urls.txt"):
+    """Get URLs from newline- or comma- separated file.
+
+    Args:
+        filename (str, optional): File path and name. Defaults to "input/urls.txt".
+
+    Returns:
+        list: list of urls
+    """
     urls = []
 
     with open(filename, "r", encoding="UTF-8") as file:
@@ -56,22 +85,42 @@ def get_url_list_from_file(filename="input/urls.txt"):
     return urls
 
 
-# Creates new file with URL list
 def set_url_list_to_file(urls, filename="input/urls_from_site.txt"):
+    """Creates new file with URL list
+
+    Args:
+        urls (list): list to save as file
+        filename (str, optional): Filename and path. Path must exist. Defaults to "input/urls_from_site.txt".
+    """
     with open(filename, "w", encoding="UTF-8") as file:
         for url in urls:
             file.write("%s\n" % url)
     print("Succesfully created URL list {}".format(filename))
 
 
-# Renames URL to a Windows and Unix compatible filename.
 def rename_url_to_pdf(url):
+    """Renames URL to a Windows and Unix compatible filename.
+
+    Args:
+        url (str): URL to convert to filename
+
+    Returns:
+        str: Filename from URL. Compatible with Windows and Unix/Linux/macOS.
+    """
     return url.replace("https://", "").replace("/", "-") + ".pdf"
 
 
-# Returns file path with directory
-# If the directory does not exist, creates it.
 def move_to_directory(file, path="output/"):
+    """Prefixes directory to filename
+
+    Args:
+        file (str): Filenae
+        path (str, optional): Path. Path will be created if it does not exist. Defaults to "output/".
+
+    Returns:
+        str: Path + filename. eg. output/filename.pdf
+    """
+
     path_exists = os.path.exists(path)
     if not path_exists:
         os.makedirs(path)
@@ -84,14 +133,19 @@ def delay(seconds=1):
     time.sleep(seconds)
 
 
-# Returns true if pdfkit detects a valid network connection.
 def get_network_connection():
+    """Returns true if pdfkit detects a valid network connection.
+
+    Returns:
+        bool: True if network connection is valid for pdfkit.
+    """
+
     try:
         pdfkit.from_url(
             "http://google.com",
             move_to_directory("_test-passed-with-google-com.pdf", "network-check/"),
-            configuration=config,
-            options=pdfkit_options,
+            configuration=CONFIG,
+            options=PDFKIT_OPTIONS,
         )
     except Exception as e:
         print("Unable to connect due to {}".format(e))
@@ -100,12 +154,10 @@ def get_network_connection():
 
 
 def main():
-    STOP_AFTER_FAILS = 10000  # Stop parsing after sequential fails.
-
     print("=== Parsing websites to pdf. ===\n")
 
-    # urls_to_parse = get_url_list_from_site("https://howmuch.water.vic.gov.au/")
     urls_to_parse = get_url_list_from_file()
+    # urls_to_parse = get_url_list_from_site("https://www.google.com")
     print(urls_to_parse)
     set_url_list_to_file(urls_to_parse)
 
@@ -123,8 +175,8 @@ def main():
             pdfkit.from_url(
                 link,
                 move_to_directory(rename_url_to_pdf(link)),
-                configuration=config,
-                options=pdfkit_options,
+                configuration=CONFIG,
+                options=PDFKIT_OPTIONS,
             )
             passes += 1
             print("Succesfully parsed {}".format(link))
