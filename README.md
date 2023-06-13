@@ -2,6 +2,8 @@
 
 A web crawler that prints a website to .pdf format
 
+:globe_with_meridians::spider_web:  :fast_forward:  :open_file_folder::scroll:
+
 ## Requirements:
 
 :heavy_check_mark: :snake: [python 3.x](https://www.python.org/downloads/) environment
