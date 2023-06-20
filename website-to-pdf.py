@@ -5,7 +5,8 @@ Description: Converts a list of URLs to .pdf files either from a file or from a 
 
 Author: Andrew Khassapov
 Date created: 5 June 2023
-Version: 1.0.0
+Date updated: 20 June 2023
+Version: 1.0.1
 """
 
 import pdfkit
@@ -19,7 +20,16 @@ PATH_WKHTMLTOPDF = (
     r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"  # Your path to wkhtmltopdf.exe
 )
 CONFIG = pdfkit.configuration(wkhtmltopdf=PATH_WKHTMLTOPDF)
-PDFKIT_OPTIONS = {"orientation": "Landscape", "zoom": 1}
+PDFKIT_OPTIONS = {
+    "orientation": "Landscape",
+    "zoom": 1,
+    "no-stop-slow-scripts": True,
+    "disable-external-links": True,
+    "disable-internal-links": True,
+    "disable-forms": True,
+    "print-media-type ": True,
+    "disable-smart-shrinking ": True,
+}
 """Options for .pdf output\n
 See for full property list:
     https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
