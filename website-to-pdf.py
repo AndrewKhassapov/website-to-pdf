@@ -27,8 +27,7 @@ PDFKIT_OPTIONS = {
     "disable-external-links": True,
     "disable-internal-links": True,
     "disable-forms": True,
-    "print-media-type ": True,
-    "disable-smart-shrinking ": True,
+    "disable-smart-shrinking": True,
 }
 """Options for .pdf output\n
 See for full property list:

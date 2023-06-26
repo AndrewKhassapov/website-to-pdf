@@ -1,1 +1,4 @@
-"https://www.google.com",
+https://howmuch.water.vic.gov.au/
+https://howmuch.water.vic.gov.au/how-much-water-was-available.php
+https://howmuch.water.vic.gov.au/how-much-water-have-we-used.php
+https://howmuch.water.vic.gov.au/water-for-the-environment.php
