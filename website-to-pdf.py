@@ -21,13 +21,15 @@ PATH_WKHTMLTOPDF = (
 )
 CONFIG = pdfkit.configuration(wkhtmltopdf=PATH_WKHTMLTOPDF)
 PDFKIT_OPTIONS = {
-    "orientation": "Landscape",
+    "orientation": "Portrait",
     "zoom": 1,
     "no-stop-slow-scripts": True,
     "disable-external-links": True,
     "disable-internal-links": True,
     "disable-forms": True,
-    "disable-smart-shrinking": True,
+    # "disable-smart-shrinking": True,
+    "no-outline": True,
+    "print-media-type": True,
 }
 """Options for .pdf output\n
 See for full property list:
